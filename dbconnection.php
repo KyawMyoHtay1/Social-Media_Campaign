@@ -4,7 +4,7 @@
 	$username = "root";
 	$password = "";
 
-	$dbname = "smcdb";
+	$dbname = "smc";
 
 	$connection = mysqli_connect($host,$username,$password,$dbname);
 ?>
