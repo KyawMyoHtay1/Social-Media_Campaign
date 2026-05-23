@@ -37,7 +37,7 @@
             }
         }
     } else {
-        echo        echo "<script>
+        echo "<script>
                 alert('Please login at first! Adminstrator only!');
                 window.location.href='login.php';
             </script>";

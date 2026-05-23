@@ -1,12 +1,15 @@
 <?php
-	
-	$host = "localhost";
-	$username = "root";
-	$password = "";
 
-	$dbname = "mydb";
+	require_once __DIR__ . '/config.php';
 
-	$connection = mysqli_connect($host,$username,$password,$dbname);	
+	$config = get_db_config();
+	$connection = mysqli_connect(
+		$config['host'],
+		$config['username'],
+		$config['password'],
+		$config['database'],
+		(int) $config['port']
+	);	
 
 	if($connection) 
 		echo "Database connection established!<br>";

@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php
+session_start();
+require_once __DIR__ . '/config.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,31 +30,18 @@
 		include("dbconnection.php");  
 
 
-		if(isset($_POST['g-recaptcha-response'])){
- 
-          $captcha=$_POST['g-recaptcha-response'];
- 
-      }
+        $captcha = $_POST['g-recaptcha-response'] ?? '';
         if(!$captcha){
           
           echo "<script>
           			alert('Please check the the captcha form.');
 
           		window.location.href='login.php';
-          </script>)";
+          </script>";
+          exit;
  
         }
-        $secretKey = "6Lc-JTAqAAAAADJG-2adT-JvQ-N0vG4Cwh20DP31";
-        $ip = $_SERVER['REMOTE_ADDR'];
-        // post request to server
- 
-        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-        $response = file_get_contents($url);
- 
-        $responseKeys = json_decode($response,true);
-        // should return JSON with success as true
- 
-        if($responseKeys["success"]) {
+        if (verify_recaptcha_response($captcha, $_SERVER['REMOTE_ADDR'] ?? '')) {
  
         	$username=	$_POST['username'];
 		$password= $_POST['password'];
@@ -127,7 +117,9 @@
  
                 echo "<script>
                 		alert('reCaptcha verification failed!');
+                		window.location.href='login.php';
                 		</script>";
+                exit;
  
         }
 

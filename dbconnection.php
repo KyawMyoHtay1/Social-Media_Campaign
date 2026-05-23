@@ -1,10 +1,6 @@
 <?php
-	
-	$host = "localhost";
-	$username = "root";
-	$password = "";
 
-	$dbname = "smc";
+require_once __DIR__ . '/config.php';
 
-	$connection = mysqli_connect($host,$username,$password,$dbname);
+$connection = create_db_connection();
 ?>

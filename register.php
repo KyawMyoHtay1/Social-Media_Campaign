@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/config.php';
+$recaptchaSiteKey = get_recaptcha_site_key();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,8 +104,12 @@
 			</div>
 		</div>
         <div class="button">
-        	<div class="g-recaptcha" data-type="image"  data-sitekey="6Lc-JTAqAAAAAHogDYj3LxhKYQmd5alBCqE9oABZ">
+        	<?php if ($recaptchaSiteKey !== '') { ?>
+        	<div class="g-recaptcha" data-type="image" data-sitekey="<?php echo htmlspecialchars($recaptchaSiteKey, ENT_QUOTES, 'UTF-8'); ?>">
         	</div>
+        	<?php } else { ?>
+        	<p>reCAPTCHA is not configured. Set <code>RECAPTCHA_SITE_KEY</code> and <code>RECAPTCHA_SECRET_KEY</code>.</p>
+        	<?php } ?>
         	<div class="contact_button">
         	<input type="submit" name="submit" value="Register">
         	<input type="reset" name="reset" value="Clear">

@@ -1,0 +1,100 @@
+CREATE TABLE IF NOT EXISTS contact (
+    Contactid INT AUTO_INCREMENT PRIMARY KEY,
+    Firstname VARCHAR(50) NOT NULL,
+    Surname VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Message TEXT,
+    DateSubmitted DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS safetytip (
+    APPSid INT AUTO_INCREMENT PRIMARY KEY,
+    AppName VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL,
+    Safety_tips TEXT,
+    Features TEXT,
+    Logo TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS parentstip (
+    PtipId INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL,
+    Tips TEXT,
+    Image TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS legislation (
+    LegId INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL,
+    Guidance TEXT NOT NULL,
+    Image TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS social_media_rankings (
+    RankID INT AUTO_INCREMENT PRIMARY KEY,
+    Rank INT NOT NULL,
+    AppName VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL,
+    Features TEXT NOT NULL,
+    Ratings VARCHAR(10) NOT NULL,
+    Image TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    ReportLink TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS livestreaming (
+    LiveID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(50) NOT NULL,
+    Description TEXT NOT NULL,
+    List TEXT NOT NULL,
+    Image TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS participate (
+    participateID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    interest VARCHAR(50) NOT NULL,
+    message TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS socialmeida (
+    participateID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    interest VARCHAR(50) NOT NULL,
+    message TEXT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS usertb (
+    Userid INT AUTO_INCREMENT PRIMARY KEY,
+    Firstname VARCHAR(50) NOT NULL,
+    Surname VARCHAR(50) NOT NULL,
+    Gender VARCHAR(10),
+    PhoneNumber VARCHAR(20),
+    DOB DATE,
+    Email VARCHAR(50) NOT NULL,
+    Address TEXT,
+    Username VARCHAR(50) NOT NULL,
+    Password VARCHAR(100) NOT NULL,
+    Country VARCHAR(50) NOT NULL,
+    Profile TEXT,
+    SignupDate DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    Role VARCHAR(10),
+    Remark TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
