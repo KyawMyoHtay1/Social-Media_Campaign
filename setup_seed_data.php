@@ -75,15 +75,35 @@ function quote_value(mysqli $connection, $value): string
     return "'" . mysqli_real_escape_string($connection, (string) $value) . "'";
 }
 
-function insert_rows_if_empty(mysqli $connection, string $table, array $rows, array &$messages): void
+function row_exists_by_columns(mysqli $connection, string $table, array $matchColumns, array $row): bool
+{
+    $conditions = [];
+
+    foreach ($matchColumns as $column) {
+        $value = $row[$column] ?? null;
+        if ($value === null) {
+            $conditions[] = "`{$column}` IS NULL";
+            continue;
+        }
+
+        $escapedValue = mysqli_real_escape_string($connection, (string) $value);
+        $conditions[] = "`{$column}` = '{$escapedValue}'";
+    }
+
+    if ($conditions === []) {
+        return false;
+    }
+
+    $sql = "SELECT 1 FROM `{$table}` WHERE " . implode(' AND ', $conditions) . " LIMIT 1";
+    $result = mysqli_query($connection, $sql);
+
+    return $result instanceof mysqli_result && mysqli_num_rows($result) > 0;
+}
+
+function insert_missing_rows(mysqli $connection, string $table, array $rows, array $matchColumns, array &$messages): void
 {
     if (!table_exists($connection, $table)) {
         $messages[] = "Skipped {$table}: table does not exist.";
-        return;
-    }
-
-    if (table_count($connection, $table) > 0) {
-        $messages[] = "Skipped {$table}: table already has data.";
         return;
     }
 
@@ -92,25 +112,34 @@ function insert_rows_if_empty(mysqli $connection, string $table, array $rows, ar
         return;
     }
 
-    $columns = array_keys($rows[0]);
-    $columnSql = implode(', ', array_map(static fn ($column) => "`{$column}`", $columns));
-    $valueRows = [];
+    $insertedCount = 0;
+    $existingCount = 0;
+    $failedCount = 0;
 
     foreach ($rows as $row) {
-        $valueRows[] = '(' . implode(', ', array_map(
+        if (row_exists_by_columns($connection, $table, $matchColumns, $row)) {
+            $existingCount++;
+            continue;
+        }
+
+        $columns = array_keys($row);
+        $columnSql = implode(', ', array_map(static fn ($column) => "`{$column}`", $columns));
+        $valueSql = implode(', ', array_map(
             static fn ($column) => quote_value($connection, $row[$column] ?? null),
             $columns
-        )) . ')';
+        ));
+        $sql = "INSERT INTO `{$table}` ({$columnSql}) VALUES ({$valueSql})";
+
+        if (!mysqli_query($connection, $sql)) {
+            $failedCount++;
+            $messages[] = "Failed {$table}: " . mysqli_error($connection);
+            continue;
+        }
+
+        $insertedCount++;
     }
 
-    $sql = "INSERT INTO `{$table}` ({$columnSql}) VALUES " . implode(",\n", $valueRows);
-
-    if (!mysqli_query($connection, $sql)) {
-        $messages[] = "Failed {$table}: " . mysqli_error($connection);
-        return;
-    }
-
-    $messages[] = "Seeded {$table}: " . count($rows) . " row(s).";
+    $messages[] = "Seeded {$table}: inserted {$insertedCount}, already existed {$existingCount}, failed {$failedCount}.";
 }
 
 ensure_social_media_rankings_column($connection);
@@ -598,15 +627,15 @@ $livestreaming = [
     ],
 ];
 
-insert_rows_if_empty($connection, 'usertb', $users, $messages);
-insert_rows_if_empty($connection, 'contact', $contacts, $messages);
-insert_rows_if_empty($connection, 'participate', $participations, $messages);
-insert_rows_if_empty($connection, 'socialmeida', $socialMediaInterest, $messages);
-insert_rows_if_empty($connection, 'safetytip', $safetyTips, $messages);
-insert_rows_if_empty($connection, 'parentstip', $parentTips, $messages);
-insert_rows_if_empty($connection, 'legislation', $legislation, $messages);
-insert_rows_if_empty($connection, 'social_media_rankings', $rankings, $messages);
-insert_rows_if_empty($connection, 'livestreaming', $livestreaming, $messages);
+insert_missing_rows($connection, 'usertb', $users, ['Username'], $messages);
+insert_missing_rows($connection, 'contact', $contacts, ['Email', 'Message'], $messages);
+insert_missing_rows($connection, 'participate', $participations, ['email', 'interest'], $messages);
+insert_missing_rows($connection, 'socialmeida', $socialMediaInterest, ['email', 'interest'], $messages);
+insert_missing_rows($connection, 'safetytip', $safetyTips, ['AppName'], $messages);
+insert_missing_rows($connection, 'parentstip', $parentTips, ['Title'], $messages);
+insert_missing_rows($connection, 'legislation', $legislation, ['Title'], $messages);
+insert_missing_rows($connection, 'social_media_rankings', $rankings, ['AppName'], $messages);
+insert_missing_rows($connection, 'livestreaming', $livestreaming, ['Title'], $messages);
 
 header('Content-Type: text/plain; charset=utf-8');
 echo "Seed process completed.\n\n";
