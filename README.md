@@ -44,7 +44,7 @@ If you use a Railway Volume with the current code, mount it to:
 
 ## Security note
 
-The tracked `code` file in this repository still contains old reCAPTCHA keys. Rotate those keys and remove that file before pushing this repository to a public remote.
+The legacy `code` file has been removed from the working tree, but the old reCAPTCHA keys should still be rotated if this repository or file was ever shared, pushed, or backed up elsewhere.
 
 ## Local development
 
