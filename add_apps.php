@@ -49,7 +49,7 @@
 
                         $sql = "select * from social_media_rankings
                                 where AppName LIKE '%$search%'
-                                OR Rank LIKE '%$search%'";
+                                OR `Rank` LIKE '%$search%'";
 
                         $result = mysqli_query($connection, $sql);
 

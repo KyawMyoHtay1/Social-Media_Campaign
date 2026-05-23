@@ -25,7 +25,7 @@
             $reportlink = $_POST['reportlink']; // Missing semicolon added here
 
             // Edit user
-            $sql = "update social_media_rankings set Rank='$rank', AppName='$appname', Description='$description', Features='$features', Ratings='$ratings', Image='$image', ReportLink='$reportlink' where RankID=$rank_id";
+            $sql = "update social_media_rankings set `Rank`='$rank', AppName='$appname', Description='$description', Features='$features', Ratings='$ratings', Image='$image', ReportLink='$reportlink' where RankID=$rank_id";
 
             if (mysqli_query($connection, $sql)) {
                         echo "<script>

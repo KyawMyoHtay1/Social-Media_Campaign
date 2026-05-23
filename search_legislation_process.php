@@ -38,7 +38,7 @@
             while($row = $result->fetch_assoc()) {
                 echo "<div class='guidance-card'>";
                 if (!empty($row["Image"])) {
-                    echo "<img src='photos/legislation/" . $row["Image"] . "' alt='" . $row["Title"] . "' class='guidance-image'>";
+                    echo "<img src='photos/guidance/" . $row["Image"] . "' alt='" . $row["Title"] . "' class='guidance-image'>";
                 }
                 echo "<h3>" . $row["Title"] . "</h3>";
                 echo "<ul class='values-list'>";

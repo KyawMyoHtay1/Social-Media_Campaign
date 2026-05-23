@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS social_media_rankings (
     Ratings VARCHAR(10) NOT NULL,
     Image TEXT,
     DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    ReportLink TEXT NOT NULL
+    ReportLink TEXT NOT NULL,
+    TechnologyDetails TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS livestreaming (

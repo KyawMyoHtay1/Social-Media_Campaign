@@ -43,7 +43,7 @@
 
                     $sql = "SELECT * FROM social_media_rankings
                             WHERE AppName LIKE '%$search%'
-                            OR Rank LIKE '%$search%'";
+                            OR `Rank` LIKE '%$search%'";
 
                     $result = mysqli_query($connection, $sql);
 
@@ -83,7 +83,8 @@
                             echo "<div class='technology-card'>";
                             echo "<img src='photos/logos/" . htmlspecialchars($tech_row['Image']) . "' alt='" . htmlspecialchars($tech_row['AppName']) . " Logo' class='technology-image'>";
                             echo "<h3>" . htmlspecialchars($tech_row['AppName']) . "</h3>";
-                            echo "<p>" . htmlspecialchars($tech_row['TechnologyDetails']) . "</p>";
+                            $technologyDetails = $tech_row['TechnologyDetails'] ?? 'Platform safety and content tools are highlighted here once ranking records are seeded.';
+                            echo "<p>" . htmlspecialchars($technologyDetails) . "</p>";
                             echo "</div>";
                         }
                     } else {
