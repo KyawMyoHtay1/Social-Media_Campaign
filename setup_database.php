@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/dbconnection.php';
 
+mysqli_report(MYSQLI_REPORT_OFF);
+
 $setupToken = 'smc_setup_20260523_b4f2c7d91e';
 $providedToken = $_GET['token'] ?? '';
 
@@ -29,12 +31,23 @@ if (!mysqli_multi_query($connection, $schema)) {
     exit;
 }
 
-do {
+while (true) {
     $result = mysqli_store_result($connection);
     if ($result instanceof mysqli_result) {
         mysqli_free_result($result);
     }
-} while (mysqli_more_results($connection) && mysqli_next_result($connection));
+
+    if (!mysqli_more_results($connection)) {
+        break;
+    }
+
+    if (!mysqli_next_result($connection)) {
+        http_response_code(500);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo "Schema import failed while processing multiple statements: " . mysqli_error($connection) . "\n";
+        exit;
+    }
+}
 
 if (mysqli_errno($connection) !== 0) {
     http_response_code(500);

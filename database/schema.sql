@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS legislation (
 
 CREATE TABLE IF NOT EXISTS social_media_rankings (
     RankID INT AUTO_INCREMENT PRIMARY KEY,
-    Rank INT NOT NULL,
+    `Rank` INT NOT NULL,
     AppName VARCHAR(50) NOT NULL,
     Description TEXT NOT NULL,
     Features TEXT NOT NULL,
